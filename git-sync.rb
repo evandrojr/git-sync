@@ -19,10 +19,10 @@ repository_map = {
       remote: "gitlab-legendario",
       uri: "git@gitlab.com:evandrojr/legendario.git",
     },
-    # {
-    #   remote: "gitlab-lay-back-subs",
-    #   uri: "git@gitlab.com:evandrojr/lay-back-subs.git",
-    # }
+    {
+      remote: "gitlab-lay-back-subs",
+      uri: "git@gitlab.com:evandrojr/lay-back-subs.git",
+    }
   ]
 }
 
