@@ -4,17 +4,33 @@ require 'git'
 require 'logger'
 require 'awesome_print'
 
-sync = []
-repository_map = {
-  name: "legendario",
-  working_dir: "/tmp/checkout",
-#  branches: ['master'],
-
-  origin: {
-      uri:  "https://github.com/evandrojr/legendario.git",
-  },
-
-  destinations: [
+sync = [
+  {
+     name: "noosfero",
+     working_dir: "/tmp",
+   #  branches: ['master'],
+     origin: {
+         uri:  "git@gitlab.com:noosfero/noosfero.git",
+     },
+     destinations: [
+     {
+       remote: "github-noosfero",
+       uri: "git@github.com:evandrojr/noosfero.git",
+     },
+    #  {
+    #    remote: "gitlab-lay-back-subs",
+    #    uri: "git@gitlab.com:evandrojr/lay-back-subs.git",
+    #  }
+     ]
+ },
+ {
+    name: "legendario",
+    working_dir: "/tmp",
+  #  branches: ['master'],
+    origin: {
+        uri:  "https://github.com/evandrojr/legendario.git",
+    },
+    destinations: [
     {
       remote: "gitlab-legendario",
       uri: "git@gitlab.com:evandrojr/legendario.git",
@@ -23,10 +39,12 @@ repository_map = {
       remote: "gitlab-lay-back-subs",
       uri: "git@gitlab.com:evandrojr/lay-back-subs.git",
     }
-  ]
-}
+    ]
+  }
 
-sync << repository_map
+]
+
+
 
 while true
   sync.each do |rep_map|
@@ -52,6 +70,16 @@ while true
     rescue=>error
         ap error
     end
+
+    begin
+       #rep_map[:branches].each do |branch|
+       g.branches.remote.each do |branch|
+         b = /[A-Z]$/i =~ branch.to_s
+         `git fetch origin #{b}`
+       end
+     rescue=>error
+         ap error
+     end
 
    begin
       #rep_map[:branches].each do |branch|
