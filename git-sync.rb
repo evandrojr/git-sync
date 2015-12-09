@@ -2,39 +2,68 @@
 
 require 'git'
 require 'logger'
+require 'awesome_print'
 
+sync = []
+repository_map = {
+  name: "legendario",
+  working_dir: "/tmp/checkout",
+#  branches: ['master'],
 
+  origin: {
+      uri:  "https://github.com/evandrojr/legendario.git",
+  },
 
-URI_GITHUB="https://github.com/evandrojr/legendario.git"
-NAME_GITHUB="legendario"
+  destinations: [
+    {
+      remote: "gitlab-legendario",
+      uri: "git@gitlab.com:evandrojr/legendario.git",
+    },
+    {
+      remote: "gitlab-lay-back-subs",
+      uri: "git@gitlab.com:evandrojr/lay-back-subs.git",
+    }
+  ]
+}
 
-URI_GITLAB="git@gitlab.com:evandrojr/legendario.git"
-REMOTE_GITLAB="gitlab"
+sync << repository_map
 
-working_dir = '/tmp/checkout'
+sync.each do |rep_map|
+  ap rep_map
+  if !File.exists? ("#{rep_map[:working_dir]}/#{rep_map[:name]}")
+      g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
+      g.config('user.name', 'Evandro Jr')
+      g.config('user.email', 'evandrojr@gmail.com')
+  end
 
-begin
-  g = Git.clone(URI_GITHUB, NAME_GITHUB, :path => working_dir)
-  g.config('user.name', 'Evandro Jr')
-  g.config('user.email', 'evandrojr@gmail.com')
-rescue=>error
-  puts error.inspect
+  #g = Git.open(working_dir, :log => Logger.new(STDOUT))
+  g = Git.open(rep_map[:working_dir] + "/#{rep_map[:name]}")
+
+  remotes = g.remotes.map { |r| r.to_s }
+  ap remotes
+
+  begin
+    rep_map[:destinations].each do |dest|
+      if !remotes.include? dest[:remote]
+        ap g.add_remote(dest[:remote], dest[:uri])  # Git::Remote
+      end
+    end
+  rescue=>error
+      ap error
+  end
+
+ begin
+    #rep_map[:branches].each do |branch|
+    g.branches.local.each do |branch|
+      ap g.checkout(branch)
+      ap g.reset_hard
+      ap g.pull('origin')
+      rep_map[:destinations].each do |dest|
+        ap g.push(g.remote(dest[:remote]))
+      end
+    end
+  rescue=>error
+      ap error
+  end
+
 end
-
-#g = Git.open(working_dir, :log => Logger.new(STDOUT))
-g = Git.open(working_dir + "/legendario")
-begin
-  r = g.add_remote(REMOTE_GITLAB, URI_GITLAB)  # Git::Remote
-  puts r.inspect
-rescue=>error
-    puts error.inspect
-end
-
-r = g.branches
-puts r.inspect
-
-r = g.pull('origin')
-puts r.inspect
-
-#Fazer para cada branch
-g.push(g.remote(REMOTE_GITLAB))
