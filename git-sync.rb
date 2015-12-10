@@ -3,50 +3,14 @@
 require 'git'
 require 'logger'
 require 'awesome_print'
+require 'yaml'
 
-sync = [
-  {
-     name: "noosfero",
-     working_dir: "/tmp",
-   #  branches: ['master'],
-     origin: {
-         uri:  "git@gitlab.com:noosfero/noosfero.git",
-     },
-     destinations: [
-     {
-       remote: "github-noosfero",
-       uri: "git@github.com:evandrojr/noosfero.git",
-     },
-    #  {
-    #    remote: "gitlab-lay-back-subs",
-    #    uri: "git@gitlab.com:evandrojr/lay-back-subs.git",
-    #  }
-     ]
- },
- {
-    name: "legendario",
-    working_dir: "/tmp",
-  #  branches: ['master'],
-    origin: {
-        uri:  "https://github.com/evandrojr/legendario.git",
-    },
-    destinations: [
-    {
-      remote: "gitlab-legendario",
-      uri: "git@gitlab.com:evandrojr/legendario.git",
-    },
-    {
-      remote: "gitlab-lay-back-subs",
-      uri: "git@gitlab.com:evandrojr/lay-back-subs.git",
-    }
-    ]
-  }
+include FileUtils
 
-]
+sync =  YAML.load(File.read('sync.yaml'))
 
-# Shell execute
-def shell_execute(command)
-    puts command
+def shell_execute(command, silent = false)
+    puts command unless silent
     o = `#{command}`
     r = $?.to_i
     if r!=0
@@ -55,50 +19,51 @@ def shell_execute(command)
     r
 end
 
+shell_execute('git config --global url."https://".insteadOf git://', true)
 
 while true
-  sync.each do |rep_map|
+  sync[:maps].each do |rep_map|
     ap rep_map
-    if !File.exists? ("#{rep_map[:working_dir]}/#{rep_map[:name]}")
+    dir = "#{rep_map[:working_dir]}/#{rep_map[:name]}"
+    if !File.exists? (dir)
         g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
-        g.config('user.name', 'Evandro Jr')
-        g.config('user.email', 'evandrojr@gmail.com')
+        g.config('user.name', sync[:user_name])
+        g.config('user.email', sync[:user_email])
     end
-
+    cd dir
     #g = Git.open(working_dir, :log => Logger.new(STDOUT))
-    g = Git.open(rep_map[:working_dir] + "/#{rep_map[:name]}")
-
+    g = Git.open(dir)
     remotes = g.remotes.map { |r| r.to_s }
-    ap remotes
-
-
     rep_map[:destinations].each do |dest|
       if !remotes.include? dest[:remote]
-        ap g.add_remote(dest[:remote], dest[:uri])  # Git::Remote
+        ap g.add_remote(dest[:remote], dest[:uri])
       end
     end
-
-  #checkout remote branches from origin
-   g.branches.remote.each do |branch|
-       branch_fullname = branch.to_s
-       puts branch_fullname
-       m = /(remotes\/origin\/)([\w|\-|\_]*)/.match("branch_fullname")
-       if m
-         b = m[2]
-         shell_execute("git checkout -b #{b} origin/#{b}")
-       end
-    end
-    #rep_map[:branches].each do |branch|
-    g.branches.local.each do |branch|
-      ap g.reset_hard
-      ap g.checkout(branch)
-      ap g.pull('origin')
-      rep_map[:destinations].each do |dest|
-        ap g.push(g.remote(dest[:remote]))
+    #checkout remote branches from origin
+    g.branches.remote.each do |branch|
+         branch_fullname = branch.to_s
+         puts branch_fullname
+         m = /(remotes\/origin\/)([\w\-\_\.]*)/.match(branch_fullname)
+         ap "Match #{m}"
+         if m and m[2] != "HEAD"
+           b = m[2]
+           if !(g.branches.local.map {|b| b.to_s}).include?(b)
+             ap g.reset_hard
+             shell_execute("git checkout -b #{b} origin/#{b}")
+           end
+         end
       end
+      #push to remote branches
+      g.branches.local.each do |branch|
+        ap g.reset_hard
+        ap g.checkout(branch)
+        ap g.reset_hard
+        rep_map[:destinations].each do |dest|
+          shell_execute("git checkout #{branch}")
+          shell_execute("git push #{dest[:remote]} #{branch}")
+        end
     end
   end #  sync.each do |rep_map|
-  puts "Trying again in 5 minutes"
+  puts "Synchronizing again in 5 minutes"
   sleep(5*60)
-
 end # while

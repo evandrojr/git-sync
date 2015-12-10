@@ -1,0 +1,68 @@
+---
+:user_name: Evandro Jr
+:user_email: evandrojr@gmail.com
+:maps:
+- :name: noosferogov
+  :working_dir: /tmp
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosferogov/noosfero.git
+  :destinations:
+  - :remote: gitlab-serpro
+    :uri: gitlab@gitlab.serpro:noosfero/noosferogov.git
+- :name: noosfero
+  :working_dir: /tmp
+  :origin:
+    :uri: git@gitlab.com:noosfero/noosfero.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:evandrojr/noosfero.git
+- :name: pairwise-api
+  :working_dir: /tmp
+  :origin:
+    :uri: gitlab@gitlab.serpro:noosfero/pairwise-api.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:evandrojr/pairwise.git
+- :name: legendario
+  :working_dir: /tmp
+  :origin:
+    :uri: https://github.com/evandrojr/legendario.git
+  :destinations:
+  - :remote: gitlab-legendario
+    :uri: git@gitlab.com:evandrojr/legendario.git
+  - :remote: gitlab-lay-back-subs
+    :uri: git@gitlab.com:evandrojr/lay-back-subs.git
+---
+:user_name: Evandro Jr
+:user_email: evandrojr@gmail.com
+:maps:
+- :name: noosferogov
+  :working_dir: /tmp
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosferogov/noosfero.git
+  :destinations:
+  - :remote: gitlab-serpro
+    :uri: gitlab@gitlab.serpro:noosfero/noosferogov.git
+- :name: noosfero
+  :working_dir: /tmp
+  :origin:
+    :uri: git@gitlab.com:noosfero/noosfero.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:evandrojr/noosfero.git
+- :name: pairwise-api
+  :working_dir: /tmp
+  :origin:
+    :uri: gitlab@gitlab.serpro:noosfero/pairwise-api.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:evandrojr/pairwise.git
+- :name: legendario
+  :working_dir: /tmp
+  :origin:
+    :uri: https://github.com/evandrojr/legendario.git
+  :destinations:
+  - :remote: gitlab-legendario
+    :uri: git@gitlab.com:evandrojr/legendario.git
+  - :remote: gitlab-lay-back-subs
+    :uri: git@gitlab.com:evandrojr/lay-back-subs.git
