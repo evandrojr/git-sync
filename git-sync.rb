@@ -4,28 +4,49 @@ require 'git'
 require 'logger'
 require 'awesome_print'
 require 'yaml'
+require 'airbrake'
 
 include FileUtils
 
 config =  YAML.load(File.read('sync.yaml'))
 
-def shell_execute(command, silent = false)
-    puts command unless silent
-    o = `#{command}`
-    r = $?.to_i
-    if r!=0
-      puts "Error: #{o} code :#{r}"
-    end
-    r
+Airbrake.configure do |config|
+  config.api_key = '43ed39d3148d60187e8be4a1715350e4'
+  config.host    = 'diagnostico.participa.br'
+  config.port    = 80
+  config.secure  = config.port == 443
+end
+
+def shell_execute(command, options = {})
+  silent = options.fetch(:silent, false)
+  raise_error = options.fetch(:raise_error, false)
+  puts command unless silent
+  o = `#{command}`
+  r = $?.to_i
+  if r!=0
+    error_msg = "Error: #{o} Code: #{r} Command: #{command}"
+    puts error_msg
+    raise error_msg if raise_error
+  end
+  r
+end
+
+def error_hander(error)
+  puts error
+  Airbrake.notify_or_ignore(
+    error
+  )
 end
 
 def run(sync)
+
   sync[:maps].each do |rep_map|
     puts "+++++++++++ Synchronizing mapping +++++++++++"
     puts rep_map.to_yaml
     puts "+++++++++++++++++++++++++++++++++++++++++++++"
     dir = "#{rep_map[:working_dir]}/#{rep_map[:name]}"
     if !File.exists? (dir)
+        puts "Cloning from #{rep_map[:origin][:uri]}"
         g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
         g.config('user.name', sync[:user_name])
         g.config('user.email', sync[:user_email])
@@ -37,18 +58,20 @@ def run(sync)
     remotes = g.remotes.map { |r| r.to_s }
     rep_map[:destinations].each do |dest|
       if !remotes.include? dest[:remote]
-        ap g.add_remote(dest[:remote], dest[:uri])
+        puts "Adding remote: #{dest[:remote]} into #{dest[:uri]}"
+        g.add_remote(dest[:remote], dest[:uri], raise_error: true)
       end
     end
     # checkout remote branches from origin
     g.branches.remote.each do |branch|
       branch_fullname = branch.to_s
-      m = /(remotes\/origin\/)([\w\-\_\.]*)/.match(branch_fullname)
-      if m and m[2] != "HEAD"
-       b = m[2]
-       if !((g.branches.local.map {|b| b.to_s}).include?(b))
+      ap branch.name
+      #puts branch_fullname
+      m = /(remotes\/origin\/)(.+$)/.match(branch_fullname)
+      if m and !branch.name =~ "^HEAD"
+       if !((g.branches.local.map {|b| b.to_s}).include?(branch.name))
          g.reset_hard
-         shell_execute("git checkout -b #{b} origin/#{b}")
+         shell_execute("git checkout -b #{branch.name} origin/#{branch.name}", raise_error: true)
        end
       end
     end
@@ -59,9 +82,9 @@ def run(sync)
       g.reset_hard
       rep_map[:destinations].each do |dest|
         begin
-          shell_execute("git push #{dest[:remote]} #{branch}")
-        rescue=>error
-          ap error
+          shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
+        rescue
+          error_hander(error)
         end
       end
     end
@@ -70,13 +93,14 @@ def run(sync)
   sleep(5*60)
 end
 
-shell_execute('git config --global url."https://".insteadOf git://', true)
+########## Begining of the execution flow #############
+
+shell_execute('git config --global url."https://".insteadOf git://', silent: true)
 
 while true
   begin
     run config
   rescue=>error
-    ap error
-    run config
+    error_hander(error)
   end
 end
