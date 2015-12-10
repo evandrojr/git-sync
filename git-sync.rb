@@ -21,9 +21,9 @@ end
 
 def run(sync)
   sync[:maps].each do |rep_map|
-    puts "+++++++++++ Synchronizing mapping: +++++++++++"
+    puts "+++++++++++ Synchronizing mapping +++++++++++"
     puts rep_map.to_yaml
-    puts ""
+    puts "+++++++++++++++++++++++++++++++++++++++++++++"
     dir = "#{rep_map[:working_dir]}/#{rep_map[:name]}"
     if !File.exists? (dir)
         g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
@@ -31,38 +31,41 @@ def run(sync)
         g.config('user.email', sync[:user_email])
     end
     cd dir
-    #g = Git.open(working_dir, :log => Logger.new(STDOUT))
+    # g = Git.open(working_dir, :log => Logger.new(STDOUT))
     g = Git.open(dir)
-    #add remotes
+    # add remotes
     remotes = g.remotes.map { |r| r.to_s }
     rep_map[:destinations].each do |dest|
       if !remotes.include? dest[:remote]
         ap g.add_remote(dest[:remote], dest[:uri])
       end
     end
-    #checkout remote branches from origin
+    # checkout remote branches from origin
     g.branches.remote.each do |branch|
-         branch_fullname = branch.to_s
-         m = /(remotes\/origin\/)([\w\-\_\.]*)/.match(branch_fullname)
-         if m and m[2] != "HEAD"
-           b = m[2]
-           if !(g.branches.local.map {|b| b.to_s}).include?(b)
-             ap g.reset_hard
-             shell_execute("git checkout -b #{b} origin/#{b}")
-           end
-         end
+      branch_fullname = branch.to_s
+      m = /(remotes\/origin\/)([\w\-\_\.]*)/.match(branch_fullname)
+      if m and m[2] != "HEAD"
+       b = m[2]
+       if !((g.branches.local.map {|b| b.to_s}).include?(b))
+         g.reset_hard
+         shell_execute("git checkout -b #{b} origin/#{b}")
+       end
       end
-      #push to remote branches
-      g.branches.local.each do |branch|
-        g.reset_hard
-        g.checkout(branch)
-        g.reset_hard
-        rep_map[:destinations].each do |dest|
-          shell_execute("git checkout #{branch}")
-          shell_execute("git push #{dest[:remote]} #{branch}")
-        end
     end
-  end #  sync.each do |rep_map|
+    # push to remote branches
+    g.branches.local.each do |branch|
+      g.reset_hard
+      g.checkout(branch)
+      g.reset_hard
+      rep_map[:destinations].each do |dest|
+        begin
+          shell_execute("git push #{dest[:remote]} #{branch} --force")
+        rescue=>error
+          ap error
+        end
+      end
+    end
+  end # sync[:maps].each do |rep_map|
   puts "Synchronizing again in 5 minutes"
   sleep(5*60)
 end
@@ -76,4 +79,4 @@ while true
     ap error
     run config
   end
-end # while
+end
