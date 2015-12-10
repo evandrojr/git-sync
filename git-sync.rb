@@ -23,7 +23,9 @@ shell_execute('git config --global url."https://".insteadOf git://', true)
 
 while true
   sync[:maps].each do |rep_map|
-    ap rep_map
+    puts "+++++++++++ Synchronizing mapping: +++++++++++"
+    puts rep_map.to_yaml
+    puts ""
     dir = "#{rep_map[:working_dir]}/#{rep_map[:name]}"
     if !File.exists? (dir)
         g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
@@ -33,6 +35,7 @@ while true
     cd dir
     #g = Git.open(working_dir, :log => Logger.new(STDOUT))
     g = Git.open(dir)
+    #add remotes
     remotes = g.remotes.map { |r| r.to_s }
     rep_map[:destinations].each do |dest|
       if !remotes.include? dest[:remote]
@@ -42,9 +45,7 @@ while true
     #checkout remote branches from origin
     g.branches.remote.each do |branch|
          branch_fullname = branch.to_s
-         puts branch_fullname
          m = /(remotes\/origin\/)([\w\-\_\.]*)/.match(branch_fullname)
-         ap "Match #{m}"
          if m and m[2] != "HEAD"
            b = m[2]
            if !(g.branches.local.map {|b| b.to_s}).include?(b)
@@ -55,9 +56,9 @@ while true
       end
       #push to remote branches
       g.branches.local.each do |branch|
-        ap g.reset_hard
-        ap g.checkout(branch)
-        ap g.reset_hard
+        g.reset_hard
+        g.checkout(branch)
+        g.reset_hard
         rep_map[:destinations].each do |dest|
           shell_execute("git checkout #{branch}")
           shell_execute("git push #{dest[:remote]} #{branch}")
