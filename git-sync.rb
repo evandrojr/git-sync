@@ -44,6 +44,16 @@ sync = [
 
 ]
 
+# Shell execute
+def shell_execute(command)
+    puts command
+    o = `#{command}`
+    r = $?.to_i
+    if r!=0
+      puts "Error: #{o} code :#{r}"
+    end
+    r
+end
 
 
 while true
@@ -61,38 +71,31 @@ while true
     remotes = g.remotes.map { |r| r.to_s }
     ap remotes
 
-    begin
-      rep_map[:destinations].each do |dest|
-        if !remotes.include? dest[:remote]
-          ap g.add_remote(dest[:remote], dest[:uri])  # Git::Remote
-        end
+
+    rep_map[:destinations].each do |dest|
+      if !remotes.include? dest[:remote]
+        ap g.add_remote(dest[:remote], dest[:uri])  # Git::Remote
       end
-    rescue=>error
-        ap error
     end
 
-    begin
-       #rep_map[:branches].each do |branch|
-       g.branches.remote.each do |branch|
-         b = /[A-Z]$/i =~ branch.to_s
-         `git fetch origin #{b}`
+  #checkout remote branches from origin
+   g.branches.remote.each do |branch|
+       branch_fullname = branch.to_s
+       puts branch_fullname
+       m = /(remotes\/origin\/)([\w|\-|\_]*)/.match("branch_fullname")
+       if m
+         b = m[2]
+         shell_execute("git checkout -b #{b} origin/#{b}")
        end
-     rescue=>error
-         ap error
-     end
-
-   begin
-      #rep_map[:branches].each do |branch|
-      g.branches.local.each do |branch|
-        ap g.checkout(branch)
-        ap g.reset_hard
-        ap g.pull('origin')
-        rep_map[:destinations].each do |dest|
-          ap g.push(g.remote(dest[:remote]))
-        end
+    end
+    #rep_map[:branches].each do |branch|
+    g.branches.local.each do |branch|
+      ap g.reset_hard
+      ap g.checkout(branch)
+      ap g.pull('origin')
+      rep_map[:destinations].each do |dest|
+        ap g.push(g.remote(dest[:remote]))
       end
-    rescue=>error
-        ap error
     end
   end #  sync.each do |rep_map|
   puts "Trying again in 5 minutes"
