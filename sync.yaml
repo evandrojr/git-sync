@@ -9,6 +9,8 @@
   :destinations:
   - :remote: gitlab-serpro
     :uri: gitlab@gitlab.serpro:noosfero/noosferogov.git
+  - :remote: gitlab
+    :uri: git@gitlab.com:participa/noosfero.git
 - :name: noosfero
   :working_dir: /tmp
   :origin:

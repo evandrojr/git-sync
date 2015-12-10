@@ -7,7 +7,7 @@ require 'yaml'
 
 include FileUtils
 
-sync =  YAML.load(File.read('sync.yaml'))
+config =  YAML.load(File.read('sync.yaml'))
 
 def shell_execute(command, silent = false)
     puts command unless silent
@@ -19,9 +19,7 @@ def shell_execute(command, silent = false)
     r
 end
 
-shell_execute('git config --global url."https://".insteadOf git://', true)
-
-while true
+def run(sync)
   sync[:maps].each do |rep_map|
     puts "+++++++++++ Synchronizing mapping: +++++++++++"
     puts rep_map.to_yaml
@@ -67,4 +65,15 @@ while true
   end #  sync.each do |rep_map|
   puts "Synchronizing again in 5 minutes"
   sleep(5*60)
+end
+
+shell_execute('git config --global url."https://".insteadOf git://', true)
+
+while true
+  begin
+    run config
+  rescue=>error
+    ap error
+    run config
+  end
 end # while
