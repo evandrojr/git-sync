@@ -65,8 +65,6 @@ def run(sync)
     # checkout remote branches from origin
     g.branches.remote.each do |branch|
       branch_fullname = branch.to_s
-      ap branch.name
-      #puts branch_fullname
       m = /(remotes\/origin\/)(.+$)/.match(branch_fullname)
       if m and !branch.name =~ "^HEAD"
        if !((g.branches.local.map {|b| b.to_s}).include?(branch.name))
