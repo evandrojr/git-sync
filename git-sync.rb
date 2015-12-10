@@ -59,7 +59,7 @@ def run(sync)
       g.reset_hard
       rep_map[:destinations].each do |dest|
         begin
-          shell_execute("git push #{dest[:remote]} #{branch} --force")
+          shell_execute("git push #{dest[:remote]} #{branch}")
         rescue=>error
           ap error
         end
