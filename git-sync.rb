@@ -5,10 +5,11 @@ require 'logger'
 require 'awesome_print'
 require 'yaml'
 require 'airbrake'
+require 'pry-byebug'
 
 include FileUtils
 
-config =  YAML.load(File.read('sync.yaml'))
+config =  YAML.load(File.read(File.join(__dir__,'sync.yaml')))
 
 Airbrake.configure do |config|
   config.api_key = '43ed39d3148d60187e8be4a1715350e4'
@@ -40,12 +41,17 @@ end
 
 def run(sync)
 
+
   sync[:maps].each do |rep_map|
     puts "+++++++++++ Synchronizing mapping +++++++++++"
     puts rep_map.to_yaml
     puts "+++++++++++++++++++++++++++++++++++++++++++++"
+
+    rep_map[:working_dir] = File.expand_path(rep_map[:working_dir])
     dir = "#{rep_map[:working_dir]}/#{rep_map[:name]}"
-    if !File.exists? (dir)
+
+
+    if !Dir.exists? (dir)
         puts "Cloning from #{rep_map[:origin][:uri]}"
         g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
         g.config('user.name', sync[:user_name])
@@ -79,11 +85,11 @@ def run(sync)
       g.checkout(branch)
       g.reset_hard
       rep_map[:destinations].each do |dest|
-        begin
+        # begin
           shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
-        rescue
-          error_hander(error)
-        end
+        # rescue=>error
+        #  error_hander(error)
+        # end
       end
     end
   end # sync[:maps].each do |rep_map|
@@ -95,10 +101,10 @@ end
 
 shell_execute('git config --global url."https://".insteadOf git://', silent: true)
 
-while true
-  begin
+# while true
+#   begin
     run config
-  rescue=>error
-    error_hander(error)
-  end
-end
+#   rescue=>error
+#     error_hander(error)
+#   end
+# end

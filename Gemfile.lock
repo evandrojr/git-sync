@@ -6,15 +6,47 @@ GEM
       multi_json
     awesome_print (1.6.1)
     builder (3.2.2)
+    byebug (8.2.1)
+    coderay (1.1.0)
+    coolline (0.5.0)
+      unicode_utils (~> 1.4)
     git (1.2.9.1)
+    hirb (0.7.3)
+    jazz_fingers (3.0.0)
+      awesome_print (~> 1.6)
+      hirb (~> 0.7)
+      pry (~> 0.10)
+      pry-byebug (~> 3.1)
+      pry-coolline (~> 0.2)
+      pry-doc (~> 0.6)
+      pry-remote (>= 0.1.7)
     logger (1.2.8)
+    method_source (0.8.2)
     multi_json (1.11.2)
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
+    pry-coolline (0.2.5)
+      coolline (~> 0.5)
+    pry-doc (0.8.0)
+      pry (~> 0.9)
+      yard (~> 0.8)
+    pry-remote (0.1.8)
+      pry (~> 0.9)
+      slop (~> 3.0)
+    slop (3.6.0)
+    unicode_utils (1.4.0)
+    yard (0.8.7.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   airbrake
-  awesome_print
   git (~> 1.2.9)
+  jazz_fingers
   logger
