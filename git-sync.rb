@@ -85,11 +85,11 @@ def run(sync)
       g.checkout(branch)
       g.reset_hard
       rep_map[:destinations].each do |dest|
-        # begin
+        begin
           shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
-        # rescue=>error
-        #  error_hander(error)
-        # end
+        rescue=>error
+          error_hander(error)
+        end
       end
     end
   end # sync[:maps].each do |rep_map|
@@ -101,10 +101,10 @@ end
 
 shell_execute('git config --global url."https://".insteadOf git://', silent: true)
 
-# while true
-#   begin
+while true
+  begin
     run config
-#   rescue=>error
-#     error_hander(error)
-#   end
-# end
+  rescue=>error
+    error_hander(error)
+  end
+end

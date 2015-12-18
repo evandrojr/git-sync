@@ -5,6 +5,6 @@ gem 'logger'
 gem 'airbrake'
 
 group :development, :test do
-  #gem 'jazz_fingers'
+  gem 'jazz_fingers'
   gem 'pry-byebug'
 end
