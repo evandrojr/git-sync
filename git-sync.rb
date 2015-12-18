@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'git'
-require 'logger'
 require 'awesome_print'
 require 'yaml'
 require 'airbrake'
-require 'pry-byebug'
+# require 'pry-byebug'
 
 include FileUtils
 
