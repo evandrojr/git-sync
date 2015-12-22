@@ -34,7 +34,13 @@
     :uri: git@github.com:noosfero-apps/proposal-app.git
 
 ########### Plugins #########################
-
+- :name: gravatar-provider
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/gravatar-provider.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/gravatar-provider.git
 - :name: pairwise
   :working_dir: ~/repositories-git-sync
   :origin:
@@ -112,6 +118,7 @@
   :destinations:
   - :remote: github
     :uri: git@github.com:noosfero-plugins/insight.git
+
 ##### Noosfero core
 # - :name: noosferogov
 #   :working_dir: ~/repositories-git-sync
