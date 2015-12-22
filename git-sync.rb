@@ -40,7 +40,6 @@ end
 
 def run(sync)
 
-
   sync[:maps].each do |rep_map|
     puts "+++++++++++ Synchronizing mapping +++++++++++"
     puts rep_map.to_yaml
@@ -62,6 +61,10 @@ def run(sync)
     # add remotes
     remotes = g.remotes.map { |r| r.to_s }
     rep_map[:destinations].each do |dest|
+      #Avoid putshes to "@softwarepublico.gov.br" by mistake
+      if dest[:uri].include?("softwarepublico.gov.br")
+        raise "You should not push to softwarepublico.gov.br"
+      end
       if !remotes.include? dest[:remote]
         puts "Adding remote: #{dest[:remote]} into #{dest[:uri]}"
         g.add_remote(dest[:remote], dest[:uri], raise_error: true)
@@ -92,8 +95,7 @@ def run(sync)
       end
     end
   end # sync[:maps].each do |rep_map|
-  puts "Synchronizing again in 5 minutes"
-  sleep(5*60)
+
 end
 
 ########## Begining of the execution flow #############
@@ -103,6 +105,8 @@ shell_execute('git config --global url."https://".insteadOf git://', silent: tru
 while true
   begin
     run config
+    puts "Synchronizing again in 5 minutes"
+    sleep(5*60)
   rescue=>error
     error_hander(error)
   end
