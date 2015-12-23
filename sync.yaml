@@ -2,135 +2,128 @@
 :user_name: Evandro Jr
 :user_email: evandrojr@gmail.com
 :maps:
-# - :name: noosferogov
-#   :working_dir: ~/repositories-git-sync
+# - :name: [repository name]
+#   :working_dir: [directory where will be the repository + name]
 #   :origin:
-#     :uri: git@softwarepublico.gov.br:noosferogov/noosfero.git
+#     :uri: [git@XXXXXX.XX:XXXXXX/XXXXX.git]
 #   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:evandrojr/noosferogov.git
+#   - :remote: [name of the remote]
+#     :uri: [git@XXXXXX.XX:XXXXXX/XXXXX.git]
 
 ########### APPS #########################
-# - :name: discussion-app
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-apps/discussion-app.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-apps/discussion-app.git
-# - :name: confjuvapp
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-apps/confjuvapp.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-apps/confjuvapp.git
-# - :name: proposal-app
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-apps/proposal-app.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-apps/proposal-app.git
-#
-# ########### Plugins #########################
-# - :name: gravatar-provider
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/gravatar-provider.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/gravatar-provider.git
-# - :name: pairwise
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/pairwise.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/pairwise.git
-# - :name: proposals_discussion
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/proposals_discussion.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/proposals_discussion.git
-# - :name: proposals_discussion
-#   :working_dir: ~/repositories-git-sync
-#   :destinations:
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/proposals_discussion.git
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/proposals_discussion.git
-# - :name: gamification
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/gamification.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/gamification.git
-# - :name: notification
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/notification.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/notification.git
-# - :name: email_article
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/email_article.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/email_article.git
-# - :name: juventude
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/juventude.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/juventude.git
-# - :name: dialoga
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/dialoga-plugin.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/dialoga-plugin.git
-# - :name: serpro_captcha
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/serpro_captcha.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/serpro_captcha.git
-# - :name: recaptcha
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/recaptcha.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/recaptcha.git
-# - :name: insight
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosfero-plugins/insight.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:noosfero-plugins/insight.git
-#
-# #### Noosfero core
-# - :name: noosferogov
-#   :working_dir: ~/repositories-git-sync
-#   :origin:
-#     :uri: git@softwarepublico.gov.br:noosferogov/noosfero.git
-#   :destinations:
-#   - :remote: github
-#     :uri: git@github.com:evandrojr/noosferogov.git
-#   - :remote: gitlab-serpro
-#     :uri: gitlab@gitlab.serpro:noosfero/noosferogov.git
-#   - :remote: gitlab
-#     :uri: git@gitlab.com:participa/noosfero.git
+- :name: discussion-app
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-apps/discussion-app.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-apps/discussion-app.git
+- :name: confjuvapp
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-apps/confjuvapp.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-apps/confjuvapp.git
+- :name: proposal-app
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-apps/proposal-app.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-apps/proposal-app.git
+
+########### Plugins #########################
+- :name: gravatar-provider
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/gravatar-provider.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/gravatar-provider.git
+- :name: pairwise
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/pairwise.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/pairwise.git
+- :name: proposals_discussion
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/proposals_discussion.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/proposals_discussion.git
+- :name: gamification
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/gamification.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/gamification.git
+- :name: notification
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/notification.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/notification.git
+- :name: email_article
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/email_article.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/email_article.git
+- :name: juventude
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/juventude.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/juventude.git
+- :name: dialoga
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/dialoga-plugin.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/dialoga-plugin.git
+- :name: serpro_captcha
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/serpro_captcha.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/serpro_captcha.git
+- :name: recaptcha
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/recaptcha.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/recaptcha.git
+- :name: insight
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosfero-plugins/insight.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:noosfero-plugins/insight.git
+
+##### Noosfero core
+- :name: noosferogov
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosferogov/noosfero.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:evandrojr/noosferogov.git
+  - :remote: gitlab-serpro
+    :uri: gitlab@gitlab.serpro:noosfero/noosferogov.git
+  - :remote: gitlab
+    :uri: git@gitlab.com:participa/noosfero.git
 - :name: noosfero
   :working_dir: ~/repositories-git-sync
   :origin:
