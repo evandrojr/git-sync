@@ -71,8 +71,8 @@ def run(sync)
     g.branches.remote.each do |branch|
       branch_fullname = branch.to_s
       m = /(remotes\/origin\/)(.+$)/.match(branch_fullname)
-      if m and !branch.name =~ "^HEAD"
-       if !((g.branches.local.map {|b| b.to_s}).include?(branch.name))
+      if m and !(branch.name =~ /^HEAD/)
+       if !((g.branches.local.map {|b| b.to_s }).include?(branch.name))
          g.reset_hard
          shell_execute("git checkout -b #{branch.name} origin/#{branch.name}", raise_error: true)
        end
@@ -105,6 +105,6 @@ while true
     puts "Synchronizing again in 5 minutes"
     sleep(5*60)
   rescue=>error
-    error_hander(error)
+     error_hander(error)
   end
 end
