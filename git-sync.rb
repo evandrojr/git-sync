@@ -44,11 +44,8 @@ def run(sync)
     puts "+++++++++++ Synchronizing mapping +++++++++++"
     puts rep_map.to_yaml
     puts "+++++++++++++++++++++++++++++++++++++++++++++"
-
     rep_map[:working_dir] = File.expand_path(rep_map[:working_dir])
     dir = "#{rep_map[:working_dir]}/#{rep_map[:name]}"
-
-
     if !Dir.exists? (dir)
         puts "Cloning from #{rep_map[:origin][:uri]}"
         g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
