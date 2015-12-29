@@ -44,8 +44,10 @@ def run(sync)
     puts "+++++++++++ Synchronizing mapping +++++++++++"
     puts rep_map.to_yaml
     puts "+++++++++++++++++++++++++++++++++++++++++++++"
+
     rep_map[:working_dir] = File.expand_path(rep_map[:working_dir])
     dir = "#{rep_map[:working_dir]}/#{rep_map[:name]}"
+
     if !Dir.exists? (dir)
         puts "Cloning from #{rep_map[:origin][:uri]}"
         g = Git.clone(rep_map[:origin][:uri], rep_map[:name], :path => rep_map[:working_dir])
@@ -61,12 +63,15 @@ def run(sync)
       #Avoid putshes to "@softwarepublico.gov.br" by mistake
       if dest[:uri].include?("softwarepublico.gov.br")
         raise "You should not push to softwarepublico.gov.br"
+        exit 1
       end
       if !remotes.include? dest[:remote]
         puts "Adding remote: #{dest[:remote]} into #{dest[:uri]}"
         g.add_remote(dest[:remote], dest[:uri], raise_error: true)
       end
     end
+
+
     # checkout remote branches from origin
     g.branches.remote.each do |branch|
       branch_fullname = branch.to_s
@@ -75,6 +80,10 @@ def run(sync)
        if !((g.branches.local.map {|b| b.to_s }).include?(branch.name))
          g.reset_hard
          shell_execute("git checkout -b #{branch.name} origin/#{branch.name}", raise_error: true)
+       else
+         g.reset_hard
+         shell_execute("git checkout #{branch.name}", raise_error: true)
+         shell_execute("git pull", raise_error: true)
        end
       end
     end
@@ -85,7 +94,7 @@ def run(sync)
       g.reset_hard
       rep_map[:destinations].each do |dest|
         begin
-          shell_execute("git push #{dest[:remote]} #{branch} ", raise_error: true)
+          shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
         rescue=>error
           error_hander(error)
         end
@@ -105,6 +114,6 @@ while true
     puts "Synchronizing again in 5 minutes"
     sleep(5*60)
   rescue=>error
-     error_hander(error)
+    error_hander(error)
   end
 end

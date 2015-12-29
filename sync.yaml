@@ -2,6 +2,7 @@
 :user_name: Evandro Jr
 :user_email: evandrojr@gmail.com
 :maps:
+
 # - :name: [repository name]
 #   :working_dir: [directory where will be the repository + name]
 #   :origin:
@@ -9,8 +10,28 @@
 #   :destinations:
 #   - :remote: [name of the remote]
 #     :uri: [git@XXXXXX.XX:XXXXXX/XXXXX.git]
-
 ########### APPS #########################
+
+##### Noosfero core
+- :name: noosferogov
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@softwarepublico.gov.br:noosferogov/noosfero.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:evandrojr/noosferogov.git
+  - :remote: gitlab-serpro
+    :uri: gitlab@gitlab.serpro:noosfero/noosferogov.git
+  - :remote: gitlab
+    :uri: git@gitlab.com:participa/noosfero.git
+- :name: noosfero
+  :working_dir: ~/repositories-git-sync
+  :origin:
+    :uri: git@gitlab.com:noosfero/noosfero.git
+  :destinations:
+  - :remote: github
+    :uri: git@github.com:evandrojr/noosfero.git
+
 - :name: discussion-app
   :working_dir: ~/repositories-git-sync
   :origin:
@@ -111,23 +132,3 @@
   :destinations:
   - :remote: github
     :uri: git@github.com:noosfero-plugins/insight.git
-
-##### Noosfero core
-- :name: noosferogov
-  :working_dir: ~/repositories-git-sync
-  :origin:
-    :uri: git@softwarepublico.gov.br:noosferogov/noosfero.git
-  :destinations:
-  - :remote: github
-    :uri: git@github.com:evandrojr/noosferogov.git
-  - :remote: gitlab-serpro
-    :uri: gitlab@gitlab.serpro:noosfero/noosferogov.git
-  - :remote: gitlab
-    :uri: git@gitlab.com:participa/noosfero.git
-- :name: noosfero
-  :working_dir: ~/repositories-git-sync
-  :origin:
-    :uri: git@gitlab.com:noosfero/noosfero.git
-  :destinations:
-  - :remote: github
-    :uri: git@github.com:evandrojr/noosfero.git
