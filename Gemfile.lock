@@ -20,7 +20,6 @@ GEM
       pry-coolline (~> 0.2)
       pry-doc (~> 0.6)
       pry-remote (>= 0.1.7)
-    logger (1.2.8)
     method_source (0.8.2)
     multi_json (1.11.2)
     pry (0.10.3)
@@ -49,4 +48,4 @@ DEPENDENCIES
   airbrake
   git (~> 1.2.9)
   jazz_fingers
-  logger
+  pry-byebug

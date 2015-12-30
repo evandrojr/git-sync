@@ -83,7 +83,7 @@ def run(sync)
        else
          g.reset_hard
          shell_execute("git checkout #{branch.name}", raise_error: true)
-         shell_execute("git pull", raise_error: true)
+         shell_execute("git pull", silent: true)
        end
       end
     end
