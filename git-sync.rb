@@ -4,7 +4,8 @@ require 'git'
 require 'awesome_print'
 require 'yaml'
 require 'airbrake'
-# require 'pry-byebug'
+require 'jazz_fingers'
+
 
 include FileUtils
 
@@ -57,20 +58,22 @@ def run(sync)
     cd dir
     # g = Git.open(working_dir, :log => Logger.new(STDOUT))
     g = Git.open(dir)
+
+    puts "Fetching origin of #{rep_map[:name]}"
+    g.remote('origin').fetch
+
     # add remotes
-    remotes = g.remotes.map { |r| r.to_s }
     rep_map[:destinations].each do |dest|
-      #Avoid putshes to "@softwarepublico.gov.br" by mistake
+      #Avoid pushes to "@softwarepublico.gov.br" by mistake
       if dest[:uri].include?("softwarepublico.gov.br")
-        raise "You should not push to softwarepublico.gov.br"
+        raise "You MUST NEVER push to softwarepublico.gov.br"
         exit 1
       end
-      if !remotes.include? dest[:remote]
+      if !g.remotes.to_s.include? dest[:remote]
         puts "Adding remote: #{dest[:remote]} into #{dest[:uri]}"
         g.add_remote(dest[:remote], dest[:uri], raise_error: true)
       end
     end
-
 
     # checkout remote branches from origin
     g.branches.remote.each do |branch|
@@ -78,23 +81,18 @@ def run(sync)
       m = /(remotes\/origin\/)(.+$)/.match(branch_fullname)
       if m and !(branch.name =~ /^HEAD/)
        if !((g.branches.local.map {|b| b.to_s }).include?(branch.name))
-         g.reset_hard
          shell_execute("git checkout -b #{branch.name} origin/#{branch.name}", raise_error: true)
        else
-         g.reset_hard
-         shell_execute("git checkout #{branch.name}", raise_error: true)
-         shell_execute("git pull", silent: true)
+         shell_execute("git reset --hard  origin/#{branch.name}", raise_error: true)
        end
       end
     end
     # push to remote branches
     g.branches.local.each do |branch|
-      g.reset_hard
       g.checkout(branch)
-      g.reset_hard
       rep_map[:destinations].each do |dest|
         begin
-          shell_execute("git push #{dest[:remote]} #{branch}  ", raise_error: true)
+          shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
         rescue=>error
           error_hander(error)
         end
