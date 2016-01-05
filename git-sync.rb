@@ -85,19 +85,16 @@ def run(sync)
        else
          shell_execute("git reset --hard  origin/#{branch.name}", raise_error: true)
        end
+       # push to remote branches
+       rep_map[:destinations].each do |dest|
+         begin
+           shell_execute("git push #{dest[:remote]} #{branch.name}", raise_error: true)
+         rescue=>error
+           error_hander(error)
+         end
+       end
       end
-    end
-    # push to remote branches
-    g.branches.local.each do |branch|
-      g.checkout(branch)
-      rep_map[:destinations].each do |dest|
-        begin
-          shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
-        rescue=>error
-          error_hander(error)
-        end
-      end
-    end
+    end # g.branches.remote.each do |branch|
   end # sync[:maps].each do |rep_map|
 
 end
