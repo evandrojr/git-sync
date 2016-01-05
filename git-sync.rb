@@ -82,19 +82,21 @@ def run(sync)
       if m and !(branch.name =~ /^HEAD/)
        if !((g.branches.local.map {|b| b.to_s }).include?(branch.name))
          shell_execute("git checkout -b #{branch.name} origin/#{branch.name}", raise_error: true)
-       else
-         shell_execute("git reset --hard  origin/#{branch.name}", raise_error: true)
-       end
-       # push to remote branches
-       rep_map[:destinations].each do |dest|
-         begin
-           shell_execute("git push #{dest[:remote]} #{branch.name}", raise_error: true)
-         rescue=>error
-           error_hander(error)
-         end
        end
       end
-    end # g.branches.remote.each do |branch|
+    end
+    # push to remote branches
+    g.branches.local.each do |branch|
+      g.checkout(branch)
+      rep_map[:destinations].each do |dest|
+        begin
+          shell_execute("git reset --hard origin/#{branch}", raise_error: true)
+          shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
+        rescue=>error
+          error_hander(error)
+        end
+      end
+    end
   end # sync[:maps].each do |rep_map|
 
 end
