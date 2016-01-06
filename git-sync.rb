@@ -91,7 +91,7 @@ def run(sync)
       rep_map[:destinations].each do |dest|
         begin
           shell_execute("git reset --hard origin/#{branch}", raise_error: true)
-          shell_execute("git push #{dest[:remote]} #{branch}", raise_error: true)
+          shell_execute("git push -f #{dest[:remote]} #{branch}", raise_error: true)
         rescue=>error
           error_hander(error)
         end
