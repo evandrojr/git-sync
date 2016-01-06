@@ -1,15 +1,12 @@
 #!/usr/bin/env ruby
-
 require 'git'
 require 'awesome_print'
 require 'yaml'
 require 'airbrake'
 require 'jazz_fingers'
 
-
 include FileUtils
-
-config =  YAML.load(File.read(File.join(__dir__,'sync.yaml')))
+config =  YAML.load(File.read(File.join(__dir__,'sync.yml')))
 
 Airbrake.configure do |config|
   config.api_key = '43ed39d3148d60187e8be4a1715350e4'
@@ -75,6 +72,8 @@ def run(sync)
       end
     end
 
+    # Important to avoid a checkout from being blocked
+    shell_execute("git reset --hard", raise_error: true)
     # checkout remote branches from origin
     g.branches.remote.each do |branch|
       branch_fullname = branch.to_s
