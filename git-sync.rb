@@ -70,7 +70,6 @@ def run(sync)
         g.add_remote(dest[:remote], dest[:uri], raise_error: true)
       end
     end
-
     # Important to avoid a checkout from being blocked
     shell_execute('git reset --hard', raise_error: true)
     # checkout remote branches from origin
@@ -80,7 +79,7 @@ def run(sync)
       next unless m && !(branch.name =~ /^HEAD/)
       unless (g.branches.local.map(&:to_s)).include?(branch.name)
         shell_execute("git checkout -b #{branch.name} origin/#{branch.name}", raise_error: true)
-              end
+      end
     end
     # push to remote branches
     g.branches.local.each do |branch|
