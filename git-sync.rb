@@ -97,7 +97,7 @@ def run(sync)
 end
 
 ########## Begining of the execution flow #############
-
+shell_execute('git config --global http.sslVerify "false"', silent: true)
 shell_execute('git config --global url."https://".insteadOf git://', silent: true)
 
 loop do
