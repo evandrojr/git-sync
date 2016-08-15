@@ -19,14 +19,14 @@ def shell_execute(command, options = {})
   silent = options.fetch(:silent, false)
   raise_error = options.fetch(:raise_error, false)
   puts command unless silent
-  o = `#{command}`
-  r = $CHILD_STATUS.to_i
-  if r != 0
-    error_msg = "Error: #{o} Code: #{r} Command: #{command}"
+  output = `#{command}`
+  return_code = $?.to_i
+  if return_code != 0
+    error_msg = "Error: #{output} Code: #{return_code} Command: #{command}"
     puts error_msg
     fail error_msg if raise_error
   end
-  r
+  return_code
 end
 
 def error_hander(error)
